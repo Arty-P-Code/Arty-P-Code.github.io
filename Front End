@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>ESP8266 Sensor Status</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        function updateStatus() {
+            $.getJSON('https://api.thingspeak.com/channels/YOUR_CHANNEL_ID/fields/1/last.json', function(data) {
+                $('#status').text(data.field1 == "1" ? "Object Absent" : "Object Present");
+            });
+        }
+        
+        $(document).ready(function() {
+            updateStatus();
+            setInterval(updateStatus, 20000);
+        });
+    </script>
+</head>
+<body>
+    <h1>ESP8266 Sensor Status</h1>
+    <p>Current status: <span id="status"></span></p>
+</body>
+</html>
