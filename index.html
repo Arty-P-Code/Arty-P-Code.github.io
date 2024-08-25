@@ -6,7 +6,7 @@
     <script>
         function updateStatus() {
             $.getJSON('https://api.thingspeak.com/channels/2635910/fields/1/last.json', function(data) {
-                $('#status').text(data.field1 == "1" ? "Object Absent" : "Object Present");
+                $('#status').text(data.field1 == "1" ? "Object Present" : "Object Absent");
             });
         }
         
