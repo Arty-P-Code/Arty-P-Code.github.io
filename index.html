@@ -1,15 +1,66 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>ESP8266 Sensor Status</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mail Status</title>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #f0f8ff;
+            transition: background-color 0.5s ease-in-out;
+        }
+
+        .container {
+            text-align: center;
+            padding: 20px;
+            border-radius: 15px;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+            transition: background-color 0.5s ease-in-out;
+        }
+
+        h1 {
+            font-size: 2.5em;
+            margin-bottom: 20px;
+        }
+
+        .status {
+            font-size: 2em;
+            font-weight: bold;
+            padding: 15px 30px;
+            border-radius: 10px;
+            color: #fff;
+            display: inline-block;
+            transition: background-color 0.5s ease-in-out;
+        }
+
+        .mail {
+            background-color: #28a745; /* Green */
+        }
+
+        .no-mail {
+            background-color: #dc3545; /* Red */
+        }
+    </style>
     <script>
         function updateStatus() {
             $.getJSON('https://api.thingspeak.com/channels/2635910/fields/1/last.json', function(data) {
-                $('#status').text(data.field1 == "1" ? "Object Present" : "Object Absent");
+                var statusText = data.field1 == "1" ? "You've got mail!" : "Sorry, no post at the moment";
+                var statusClass = data.field1 == "1" ? "mail" : "no-mail";
+                var bgColor = data.field1 == "1" ? "#e0ffe6" : "#ffe6e6";
+
+                $('#status').text(statusText).removeClass().addClass('status ' + statusClass);
+                $('body').css('background-color', bgColor);
+                $('.container').css('background-color', bgColor);
             });
         }
-        
+
         $(document).ready(function() {
             updateStatus();
             setInterval(updateStatus, 20000);
@@ -17,7 +68,9 @@
     </script>
 </head>
 <body>
-    <h1>ESP8266 Sensor Status</h1>
-    <p>Current status: <span id="status"></span></p>
+    <div class="container">
+        <h1>Mailbox Status</h1>
+        <p>Current status: <span id="status"></span></p>
+    </div>
 </body>
 </html>
