@@ -5,17 +5,46 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ThingSpeak Animation</title>
     <style>
-        #animation {
-            width: 200px;
-            height: 200px;
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+            background-color: #f0f0f0;
+        }
+        h1 {
+            text-align: center;
+            color: #333;
+        }
+        #animation-container {
+            width: 100%;
+            max-width: 500px;
             margin: 20px auto;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        #animation {
+            width: 100%;
+            height: auto;
+            max-height: 80vh;
+            object-fit: contain;
+        }
+        #status {
+            text-align: center;
+            font-size: 18px;
+            margin-top: 20px;
+            color: #666;
         }
     </style>
 </head>
 <body>
     <h1>ThingSpeak Animation</h1>
-    <div id="animation">
-        <!-- The current frame will be inserted here -->
+    <div id="animation-container">
+        <img id="animation" alt="Animation Frame">
     </div>
     <p id="status">Current status: Loading...</p>
 
@@ -36,7 +65,7 @@
         let currentFrame = 0;
 
         function updateAnimation() {
-            animationElement.innerHTML = `<img src="${frames[currentFrame]}" alt="Animation Frame">`;
+            animationElement.src = frames[currentFrame];
             currentFrame++;
             
             if (currentFrame >= frames.length) {
@@ -62,7 +91,7 @@
         }
 
         function displayFrame(frameIndex) {
-            animationElement.innerHTML = `<img src="${frames[frameIndex]}" alt="Animation Frame">`;
+            animationElement.src = frames[frameIndex];
         }
 
         function fetchThingSpeakData() {
