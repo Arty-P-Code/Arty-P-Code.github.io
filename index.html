@@ -10,9 +10,6 @@
             height: 200px;
             margin: 20px auto;
         }
-        .hidden {
-            display: none;
-        }
     </style>
 </head>
 <body>
@@ -29,46 +26,25 @@
         let animationInterval;
 
         // Replace with your actual ThingSpeak channel ID and field
-        const channelId = '2635910';
+        const channelId = 'YOUR_CHANNEL_ID';
         const fieldNumber = 1;
 
         // List of your SVG frame filenames
-        const frames = [
-            'assets/frame01.svg',
-            'assets/frame02.svg',
-            'assets/frame03.svg',
-            'assets/frame04.svg',
-            'assets/frame05.svg',
-            'assets/frame06.svg',
-            'assets/frame07.svg',
-            'assets/frame08.svg',
-            'assets/frame09.svg',
-            'assets/frame10.svg',
-            'assets/frame11.svg',
-            'assets/frame12.svg',
-            'assets/frame13.svg',
-            'assets/frame14.svg',
-            'assets/frame15.svg',
-            'assets/frame16.svg',
-            'assets/frame17.svg',
-            'assets/frame18.svg',
-            'assets/frame19.svg',
-            'assets/frame20.svg',
-            'assets/frame21.svg',
-            'assets/frame22.svg',
-            'assets/frame23.svg',
-            'assets/frame24.svg',
-            // Add more frames as needed
-        ];
+        const frames = Array.from({length: 24}, (_, i) => `assets/frame${String(i + 1).padStart(2, '0')}.svg`);
 
         let currentFrame = 0;
 
         function updateAnimation() {
             animationElement.innerHTML = `<img src="${frames[currentFrame]}" alt="Animation Frame">`;
-            currentFrame = (currentFrame + 1) % frames.length;
+            currentFrame++;
+            
+            if (currentFrame >= frames.length) {
+                stopAnimation();
+            }
         }
 
         function startAnimation() {
+            currentFrame = 0;
             if (!animationInterval) {
                 animationInterval = setInterval(updateAnimation, 100); // Change frame every 100ms
             }
@@ -79,7 +55,10 @@
                 clearInterval(animationInterval);
                 animationInterval = null;
             }
-            animationElement.innerHTML = ''; // Clear the animation
+        }
+
+        function displayFrame(frameIndex) {
+            animationElement.innerHTML = `<img src="${frames[frameIndex]}" alt="Animation Frame">`;
         }
 
         function fetchThingSpeakData() {
@@ -93,6 +72,7 @@
                         startAnimation();
                     } else if (currentStatus === 0) {
                         stopAnimation();
+                        displayFrame(0); // Display frame01.svg when status is 0
                     }
 
                     lastStatus = currentStatus;
@@ -108,6 +88,9 @@
 
         // Initial fetch
         fetchThingSpeakData();
+
+        // Initially display frame01.svg
+        displayFrame(0);
     </script>
 </body>
 </html>
