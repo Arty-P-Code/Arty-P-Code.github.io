@@ -24,6 +24,7 @@
         const statusElement = document.getElementById('status');
         let lastStatus = null;
         let animationInterval;
+        let currentStatus = 0;
 
         // Replace with your actual ThingSpeak channel ID and field
         const channelId = '2635910';
@@ -40,6 +41,9 @@
             
             if (currentFrame >= frames.length) {
                 stopAnimation();
+                if (currentStatus === 1) {
+                    displayFrame(23); // Display frame24.svg
+                }
             }
         }
 
@@ -65,14 +69,19 @@
             fetch(`https://api.thingspeak.com/channels/${channelId}/fields/${fieldNumber}/last.json`)
                 .then(response => response.json())
                 .then(data => {
-                    const currentStatus = parseInt(data[`field${fieldNumber}`]);
+                    currentStatus = parseInt(data[`field${fieldNumber}`]);
                     statusElement.textContent = `Current status: ${currentStatus}`;
 
                     if (lastStatus === 0 && currentStatus === 1) {
                         startAnimation();
+                    } else if (currentStatus === 1 && !animationInterval && currentFrame === 0) {
+                        // Play animation on page load/refresh if status is 1
+                        startAnimation();
                     } else if (currentStatus === 0) {
                         stopAnimation();
                         displayFrame(0); // Display frame01.svg when status is 0
+                    } else if (currentStatus === 1 && !animationInterval) {
+                        displayFrame(23); // Display frame24.svg when status is 1 and animation is not playing
                     }
 
                     lastStatus = currentStatus;
@@ -86,11 +95,8 @@
         // Fetch data every 15 seconds (adjust as needed)
         setInterval(fetchThingSpeakData, 15000);
 
-        // Initial fetch
+        // Initial fetch and display
         fetchThingSpeakData();
-
-        // Initially display frame01.svg
-        displayFrame(0);
     </script>
 </body>
 </html>
