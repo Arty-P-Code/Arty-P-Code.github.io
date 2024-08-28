@@ -3,74 +3,90 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mail Status</title>
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <title>ThingSpeak Animation</title>
     <style>
-        body {
-            font-family: 'Arial', sans-serif;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            margin: 0;
-            background-color: #f0f8ff;
-            transition: background-color 0.5s ease-in-out;
+        #animation {
+            width: 200px;
+            height: 200px;
+            margin: 20px auto;
         }
-
-        .container {
-            text-align: center;
-            padding: 20px;
-            border-radius: 15px;
-            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
-            transition: background-color 0.5s ease-in-out;
-        }
-
-        h1 {
-            font-size: 2.5em;
-            margin-bottom: 20px;
-        }
-
-        .status {
-            font-size: 2em;
-            font-weight: bold;
-            padding: 15px 30px;
-            border-radius: 10px;
-            color: #fff;
-            display: inline-block;
-            transition: background-color 0.5s ease-in-out;
-        }
-
-        .mail {
-            background-color: #28a745; /* Green */
-        }
-
-        .no-mail {
-            background-color: #dc3545; /* Red */
+        .hidden {
+            display: none;
         }
     </style>
-    <script>
-        function updateStatus() {
-            $.getJSON('https://api.thingspeak.com/channels/2635910/fields/1/last.json', function(data) {
-                var statusText = data.field1 == "1" ? "You've got mail!" : "Sorry, no post at the moment";
-                var statusClass = data.field1 == "1" ? "mail" : "no-mail";
-                var bgColor = data.field1 == "1" ? "#e0ffe6" : "#ffe6e6";
-
-                $('#status').text(statusText).removeClass().addClass('status ' + statusClass);
-                $('body').css('background-color', bgColor);
-                $('.container').css('background-color', bgColor);
-            });
-        }
-
-        $(document).ready(function() {
-            updateStatus();
-            setInterval(updateStatus, 20000);
-        });
-    </script>
 </head>
 <body>
-    <div class="container">
-        <h1>Mailbox Status</h1>
-        <p>Current status: <span id="status"></span></p>
+    <h1>ThingSpeak Animation</h1>
+    <div id="animation">
+        <!-- The current frame will be inserted here -->
     </div>
+    <p id="status">Current status: Loading...</p>
+
+    <script>
+        const animationElement = document.getElementById('animation');
+        const statusElement = document.getElementById('status');
+        let lastStatus = null;
+        let animationInterval;
+
+        // Replace with your actual ThingSpeak channel ID and field
+        const channelId = 'YOUR_CHANNEL_ID';
+        const fieldNumber = 1;
+
+        // List of your SVG frame filenames
+        const frames = [
+            'assets/frame1.svg',
+            'assets/frame2.svg',
+            'assets/frame3.svg',
+            // Add more frames as needed
+        ];
+
+        let currentFrame = 0;
+
+        function updateAnimation() {
+            animationElement.innerHTML = `<img src="${frames[currentFrame]}" alt="Animation Frame">`;
+            currentFrame = (currentFrame + 1) % frames.length;
+        }
+
+        function startAnimation() {
+            if (!animationInterval) {
+                animationInterval = setInterval(updateAnimation, 100); // Change frame every 100ms
+            }
+        }
+
+        function stopAnimation() {
+            if (animationInterval) {
+                clearInterval(animationInterval);
+                animationInterval = null;
+            }
+            animationElement.innerHTML = ''; // Clear the animation
+        }
+
+        function fetchThingSpeakData() {
+            fetch(`https://api.thingspeak.com/channels/${channelId}/fields/${fieldNumber}/last.json`)
+                .then(response => response.json())
+                .then(data => {
+                    const currentStatus = parseInt(data[`field${fieldNumber}`]);
+                    statusElement.textContent = `Current status: ${currentStatus}`;
+
+                    if (lastStatus === 0 && currentStatus === 1) {
+                        startAnimation();
+                    } else if (currentStatus === 0) {
+                        stopAnimation();
+                    }
+
+                    lastStatus = currentStatus;
+                })
+                .catch(error => {
+                    console.error('Error fetching ThingSpeak data:', error);
+                    statusElement.textContent = 'Error fetching data';
+                });
+        }
+
+        // Fetch data every 15 seconds (adjust as needed)
+        setInterval(fetchThingSpeakData, 15000);
+
+        // Initial fetch
+        fetchThingSpeakData();
+    </script>
 </body>
 </html>
