@@ -12,25 +12,25 @@
             display: flex;
             flex-direction: column;
             align-items: center;
+            justify-content: center;
             min-height: 100vh;
             background-color: #f0f0f0;
         }
         h1 {
             text-align: center;
             color: #333;
+            margin-bottom: 20px;
         }
         #animation-container {
-            width: 100%;
-            max-width: 500px;
-            margin: 20px auto;
+            width: 90vw;
+            height: 80vh;
             display: flex;
             justify-content: center;
             align-items: center;
         }
         #animation {
             width: 100%;
-            height: auto;
-            max-height: 80vh;
+            height: 100%;
             object-fit: contain;
         }
         #status {
@@ -44,7 +44,7 @@
 <body>
     <h1>ThingSpeak Animation</h1>
     <div id="animation-container">
-        <img id="animation" alt="Animation Frame">
+        <img id="animation" alt="">
     </div>
     <p id="status">Current status: Loading...</p>
 
@@ -56,7 +56,7 @@
         let currentStatus = 0;
 
         // Replace with your actual ThingSpeak channel ID and field
-        const channelId = '2635910';
+        const channelId = 'YOUR_CHANNEL_ID';
         const fieldNumber = 1;
 
         // List of your SVG frame filenames
@@ -122,6 +122,9 @@
                     statusElement.textContent = 'Error fetching data';
                 });
         }
+
+        // Display frame 1 immediately
+        displayFrame(0);
 
         // Fetch data every 15 seconds (adjust as needed)
         setInterval(fetchThingSpeakData, 15000);
