@@ -75,8 +75,10 @@
                     if (lastStatus === 0 && currentStatus === 1) {
                         startAnimation();
                     } else if (currentStatus === 1 && !animationInterval && currentFrame === 0) {
-                        // Play animation on page load/refresh if status is 1
-                        startAnimation();
+                        // Play animation on page load/refresh if status is 1, with a delay
+                        setTimeout(() => {
+                            startAnimation();
+                        }, 2000); // 2000 milliseconds (2 seconds) delay
                     } else if (currentStatus === 0) {
                         stopAnimation();
                         displayFrame(0); // Display frame01.svg when status is 0
