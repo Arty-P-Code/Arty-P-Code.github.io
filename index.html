@@ -5,6 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Animation</title>
     <style>
+        @import url('https://fonts.googleapis.com/css2?family=Special+Elite&display=swap');
+
         body {
             font-family: Arial, sans-serif;
             margin: 0;
@@ -17,12 +19,13 @@
             background-color: white;
         }
         #greeting {
+            font-family: 'Special Elite', cursive;
             font-size: 2em;
             overflow: hidden;
             white-space: nowrap;
-            border-right: 2px solid #000;
-            animation: typing 3s steps(40, end), blink-caret 0.75s step-end infinite;
             margin-bottom: 20px;
+            max-width: 0;
+            animation: typing 3s steps(40, end) forwards;
         }
         #animation-container {
             width: 90vw;
@@ -37,12 +40,8 @@
             object-fit: contain;
         }
         @keyframes typing {
-            from { width: 0 }
-            to { width: 100% }
-        }
-        @keyframes blink-caret {
-            from, to { border-color: transparent }
-            50% { border-color: #000 }
+            from { max-width: 0 }
+            to { max-width: 100% }
         }
         /* Status text is now hidden. Uncomment the following if needed for testing
         #status {
