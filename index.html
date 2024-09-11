@@ -44,7 +44,10 @@
 <body>
     <h1>ThingSpeak Animation</h1>
     <div id="animation-container">
-        <img id="animation" alt="">
+        <video id="animation" muted>
+            <source src="assets/IMG_0.mov" type="video/quicktime">
+            Your browser does not support the video tag.
+        </video>
     </div>
     <p id="status">Current status: Loading...</p>
 
@@ -52,46 +55,29 @@
         const animationElement = document.getElementById('animation');
         const statusElement = document.getElementById('status');
         let lastStatus = null;
-        let animationInterval;
         let currentStatus = 0;
 
         // Replace with your actual ThingSpeak channel ID and field
         const channelId = '2635910';
         const fieldNumber = 1;
 
-        // List of your SVG frame filenames
-        const frames = Array.from({length: 24}, (_, i) => `assets/frame${String(i + 1).padStart(2, '0')}.svg`);
-
-        let currentFrame = 0;
-
-        function updateAnimation() {
-            animationElement.src = frames[currentFrame];
-            currentFrame++;
-            
-            if (currentFrame >= frames.length) {
-                stopAnimation();
-                if (currentStatus === 1) {
-                    displayFrame(23); // Display frame24.svg
-                }
-            }
-        }
-
         function startAnimation() {
-            currentFrame = 0;
-            if (!animationInterval) {
-                animationInterval = setInterval(updateAnimation, 100); // Change frame every 100ms
-            }
+            animationElement.currentTime = 0;
+            animationElement.play();
         }
 
         function stopAnimation() {
-            if (animationInterval) {
-                clearInterval(animationInterval);
-                animationInterval = null;
-            }
+            animationElement.pause();
         }
 
-        function displayFrame(frameIndex) {
-            animationElement.src = frames[frameIndex];
+        function displayFirstFrame() {
+            animationElement.currentTime = 0;
+            animationElement.pause();
+        }
+
+        function displayLastFrame() {
+            animationElement.currentTime = animationElement.duration;
+            animationElement.pause();
         }
 
         function fetchThingSpeakData() {
@@ -103,16 +89,16 @@
 
                     if (lastStatus === 0 && currentStatus === 1) {
                         startAnimation();
-                    } else if (currentStatus === 1 && !animationInterval && currentFrame === 0) {
+                    } else if (currentStatus === 1 && animationElement.paused && animationElement.currentTime === 0) {
                         // Play animation on page load/refresh if status is 1, with a delay
                         setTimeout(() => {
                             startAnimation();
                         }, 2000); // 2000 milliseconds (2 seconds) delay
                     } else if (currentStatus === 0) {
                         stopAnimation();
-                        displayFrame(0); // Display frame01.svg when status is 0
-                    } else if (currentStatus === 1 && !animationInterval) {
-                        displayFrame(23); // Display frame24.svg when status is 1 and animation is not playing
+                        displayFirstFrame();
+                    } else if (currentStatus === 1 && animationElement.ended) {
+                        displayLastFrame();
                     }
 
                     lastStatus = currentStatus;
@@ -123,14 +109,21 @@
                 });
         }
 
-        // Display frame 1 immediately
-        displayFrame(0);
+        // Display first frame immediately
+        displayFirstFrame();
 
         // Fetch data every 15 seconds (adjust as needed)
         setInterval(fetchThingSpeakData, 15000);
 
         // Initial fetch and display
         fetchThingSpeakData();
+
+        // Event listener for when the video ends
+        animationElement.addEventListener('ended', () => {
+            if (currentStatus === 1) {
+                displayLastFrame();
+            }
+        });
     </script>
 </body>
 </html>
