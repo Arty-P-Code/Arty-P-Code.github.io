@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ThingSpeak Animation</title>
+    <title>Animation</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -14,12 +14,7 @@
             align-items: center;
             justify-content: center;
             min-height: 100vh;
-            background-color: #f0f0f0;
-        }
-        h1 {
-            text-align: center;
-            color: #333;
-            margin-bottom: 20px;
+            background-color: white;
         }
         #animation-container {
             width: 90vw;
@@ -33,27 +28,31 @@
             height: 100%;
             object-fit: contain;
         }
+        /* Status text is now hidden. Uncomment the following if needed for testing
         #status {
             text-align: center;
             font-size: 18px;
             margin-top: 20px;
             color: #666;
         }
+        */
     </style>
 </head>
 <body>
-    <h1>ThingSpeak Animation</h1>
     <div id="animation-container">
         <video id="animation" muted>
             <source src="assets/IMG_0.MOV" type="video/quicktime">
             Your browser does not support the video tag.
         </video>
     </div>
+    <!-- Status display is now commented out. Uncomment if needed for testing
     <p id="status">Current status: Loading...</p>
+    -->
 
     <script>
         const animationElement = document.getElementById('animation');
-        const statusElement = document.getElementById('status');
+        // Status element is commented out. Uncomment if needed for testing
+        // const statusElement = document.getElementById('status');
         let lastStatus = null;
         let currentStatus = 0;
 
@@ -85,7 +84,8 @@
                 .then(response => response.json())
                 .then(data => {
                     currentStatus = parseInt(data[`field${fieldNumber}`]);
-                    statusElement.textContent = `Current status: ${currentStatus}`;
+                    // Status display is commented out. Uncomment if needed for testing
+                    // statusElement.textContent = `Current status: ${currentStatus}`;
 
                     if (lastStatus === 0 && currentStatus === 1) {
                         startAnimation();
@@ -105,7 +105,8 @@
                 })
                 .catch(error => {
                     console.error('Error fetching ThingSpeak data:', error);
-                    statusElement.textContent = 'Error fetching data';
+                    // Status display is commented out. Uncomment if needed for testing
+                    // statusElement.textContent = 'Error fetching data';
                 });
         }
 
