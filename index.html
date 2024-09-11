@@ -25,7 +25,9 @@
             white-space: nowrap;
             margin-bottom: 20px;
             max-width: 0;
-            animation: typing 4s steps(40, end) forwards;
+            animation: 
+                typing 3s steps(40, end) forwards,
+                colorCycle 10s linear infinite;
         }
         #animation-container {
             width: 90vw;
@@ -42,6 +44,13 @@
         @keyframes typing {
             from { max-width: 0 }
             to { max-width: 100% }
+        }
+        @keyframes colorCycle {
+            0% { color: #00CED1; }  /* Dark Turquoise */
+            25% { color: #40E0D0; } /* Turquoise */
+            50% { color: #48D1CC; } /* Medium Turquoise */
+            75% { color: #20B2AA; } /* Light Sea Green */
+            100% { color: #00CED1; } /* Back to Dark Turquoise */
         }
         /* Status text is now hidden. Uncomment the following if needed for testing
         #status {
