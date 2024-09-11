@@ -16,6 +16,14 @@
             min-height: 100vh;
             background-color: white;
         }
+        #greeting {
+            font-size: 2em;
+            overflow: hidden;
+            white-space: nowrap;
+            border-right: 2px solid #000;
+            animation: typing 3s steps(40, end), blink-caret 0.75s step-end infinite;
+            margin-bottom: 20px;
+        }
         #animation-container {
             width: 90vw;
             height: 80vh;
@@ -28,6 +36,14 @@
             height: 100%;
             object-fit: contain;
         }
+        @keyframes typing {
+            from { width: 0 }
+            to { width: 100% }
+        }
+        @keyframes blink-caret {
+            from, to { border-color: transparent }
+            50% { border-color: #000 }
+        }
         /* Status text is now hidden. Uncomment the following if needed for testing
         #status {
             text-align: center;
@@ -39,6 +55,7 @@
     </style>
 </head>
 <body>
+    <div id="greeting"></div>
     <div id="animation-container">
         <video id="animation" muted>
             <source src="assets/IMG_0.MOV" type="video/quicktime">
@@ -109,6 +126,28 @@
                     // statusElement.textContent = 'Error fetching data';
                 });
         }
+
+        function updateGreeting() {
+            const greetingElement = document.getElementById('greeting');
+            const hour = new Date().getHours();
+            let greeting;
+
+            if (hour < 12) {
+                greeting = "Good morning, Laura";
+            } else if (hour < 18) {
+                greeting = "Good afternoon, Laura";
+            } else {
+                greeting = "Good evening, Laura";
+            }
+
+            greetingElement.textContent = greeting;
+        }
+
+        // Update greeting on page load
+        updateGreeting();
+
+        // Update greeting every minute (in case the page is left open)
+        setInterval(updateGreeting, 60000);
 
         // Display first frame immediately
         displayFirstFrame();
