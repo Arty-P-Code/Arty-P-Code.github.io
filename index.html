@@ -25,7 +25,6 @@
             white-space: nowrap;
             margin-bottom: 20px;
             max-width: 0;
-            animation: typing 3s steps(40, end) forwards;
             background: linear-gradient(
                 to right, 
                 #60756E, #6E847E, #7E9993, #88A19B, #7E9993, #6E847E, #60756E
@@ -58,14 +57,6 @@
             0% { background-position: 0% 50%; }
             100% { background-position: 100% 50%; }
         }
-        /* Status text is now hidden. Uncomment the following if needed for testing
-        #status {
-            text-align: center;
-            font-size: 18px;
-            margin-top: 20px;
-            color: #666;
-        }
-        */
     </style>
 </head>
 <body>
@@ -76,18 +67,12 @@
             Your browser does not support the video tag.
         </video>
     </div>
-    <!-- Status display is now commented out. Uncomment if needed for testing
-    <p id="status">Current status: Loading...</p>
-    -->
 
     <script>
         const animationElement = document.getElementById('animation');
-        // Status element is commented out. Uncomment if needed for testing
-        // const statusElement = document.getElementById('status');
         let lastStatus = null;
         let currentStatus = 0;
 
-        // Replace with your actual ThingSpeak channel ID and field
         const channelId = '2635910';
         const fieldNumber = 1;
 
@@ -115,16 +100,13 @@
                 .then(response => response.json())
                 .then(data => {
                     currentStatus = parseInt(data[`field${fieldNumber}`]);
-                    // Status display is commented out. Uncomment if needed for testing
-                    // statusElement.textContent = `Current status: ${currentStatus}`;
 
                     if (lastStatus === 0 && currentStatus === 1) {
                         startAnimation();
                     } else if (currentStatus === 1 && animationElement.paused && animationElement.currentTime === 0) {
-                        // Play animation on page load/refresh if status is 1, with a delay
                         setTimeout(() => {
                             startAnimation();
-                        }, 2000); // 2000 milliseconds (2 seconds) delay
+                        }, 2000);
                     } else if (currentStatus === 0) {
                         stopAnimation();
                         displayFirstFrame();
@@ -136,8 +118,6 @@
                 })
                 .catch(error => {
                     console.error('Error fetching ThingSpeak data:', error);
-                    // Status display is commented out. Uncomment if needed for testing
-                    // statusElement.textContent = 'Error fetching data';
                 });
         }
 
@@ -155,28 +135,18 @@
             }
 
             greetingElement.textContent = greeting;
-            // Reset the animations
-            greetingElement.style.animation = 'none';
-            greetingElement.offsetHeight; // Trigger reflow
-            greetingElement.style.animation = 'gradient 10s linear infinite';
         }
 
-        // Update greeting on page load
         updateGreeting();
 
-        // Update greeting every minute (in case the page is left open)
         setInterval(updateGreeting, 60000);
 
-        // Display first frame immediately
         displayFirstFrame();
 
-        // Fetch data every 15 seconds (adjust as needed)
         setInterval(fetchThingSpeakData, 15000);
 
-        // Initial fetch and display
         fetchThingSpeakData();
 
-        // Event listener for when the video ends
         animationElement.addEventListener('ended', () => {
             if (currentStatus === 1) {
                 displayLastFrame();
