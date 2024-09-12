@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Animation</title>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Tangerine');
+        @import url('https://fonts.googleapis.com/css2?family=Montserrat+Alternates');
 
         body {
             font-family: Arial, sans-serif;
@@ -19,7 +19,7 @@
             background-color: white;
         }
         #greeting {
-            font-family: 'Tangerine', serif;
+            font-family: 'Montserrat Alternates', 'Light 300 Italic';
             font-size: 2.6em;
             overflow: hidden;
             white-space: nowrap;
@@ -28,7 +28,7 @@
             animation: typing 3s steps(40, end) forwards;
             background: linear-gradient(
                 to right, 
-                #60756E, #6E847E, #7E9993, #88A19B
+                #60756E, #6E847E, #7E9993, #88A19B, #7E9993, #6E847E, #60756E
             );
             background-size: 200% auto;
             color: transparent;
@@ -159,7 +159,7 @@
             // Reset the animations
             greetingElement.style.animation = 'none';
             greetingElement.offsetHeight; // Trigger reflow
-            greetingElement.style.animation = 'typing 3s steps(40, end) forwards, gradient 10s linear infinite';
+            greetingElement.style.animation = 'gradient 10s linear infinite';
         }
 
         // Update greeting on page load
