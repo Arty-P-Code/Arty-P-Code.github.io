@@ -25,13 +25,23 @@
             white-space: nowrap;
             margin-bottom: 20px;
             max-width: 0;
+            animation: typing 3s steps(40, end) forwards;
+            background: linear-gradient(
+                to right, 
+                #60756E, #6E847E, #7E9993, #88A19B
+            );
+            background-size: 200% auto;
+            color: transparent;
+            -webkit-background-clip: text;
+            background-clip: text;
             animation: 
                 typing 3s steps(40, end) forwards,
-                colorCycle 10s linear infinite;
+                gradient 10s linear infinite;
         }
         #animation-container {
-            width: 90vw;
-            height: 80vh;
+            width: 80%;
+            height: 300px;
+            background-color: #ddd;
             display: flex;
             justify-content: center;
             align-items: center;
@@ -45,12 +55,9 @@
             from { max-width: 0 }
             to { max-width: 100% }
         }
-        @keyframes colorCycle {
-            0% { color: #00CED1; }  /* Dark Turquoise */
-            25% { color: #40E0D0; } /* Turquoise */
-            50% { color: #48D1CC; } /* Medium Turquoise */
-            75% { color: #20B2AA; } /* Light Sea Green */
-            100% { color: #00CED1; } /* Back to Dark Turquoise */
+        @keyframes gradient {
+            0% { background-position: 0% 50%; }
+            100% { background-position: 100% 50%; }
         }
         /* Status text is now hidden. Uncomment the following if needed for testing
         #status {
@@ -149,6 +156,10 @@
             }
 
             greetingElement.textContent = greeting;
+            // Reset the animations
+            greetingElement.style.animation = 'none';
+            greetingElement.offsetHeight; // Trigger reflow
+            greetingElement.style.animation = 'typing 3s steps(40, end) forwards, gradient 10s linear infinite';
         }
 
         // Update greeting on page load
