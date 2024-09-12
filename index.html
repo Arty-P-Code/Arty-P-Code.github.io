@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Animation</title>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Montserrat+Alternates:wght@400;700&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Montserrat+Alternates:ital,wght@1,300&display=swap');
 
         body {
             font-family: Arial, sans-serif;
@@ -18,13 +18,20 @@
             min-height: 100vh;
             background-color: white;
         }
+        #content-wrapper {
+            width: 80%;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+        }
         #greeting {
             font-family: 'Montserrat Alternates', sans-serif;
+            font-weight: 300;
+            font-style: italic;
             font-size: 2.6em;
             overflow: hidden;
             white-space: nowrap;
             margin-bottom: 20px;
-            max-width: 0;
             background: linear-gradient(
                 to right, 
                 #60756E, #6E847E, #7E9993, #88A19B, #7E9993, #6E847E, #60756E
@@ -38,7 +45,7 @@
                 gradient 10s linear infinite;
         }
         #animation-container {
-            width: 80%;
+            width: 100%;
             background-color: white;
             display: flex;
             justify-content: center;
@@ -60,12 +67,14 @@
     </style>
 </head>
 <body>
-    <div id="greeting"></div>
-    <div id="animation-container">
-        <video id="animation" muted>
-            <source src="assets/IMG_0.MOV" type="video/quicktime">
-            Your browser does not support the video tag.
-        </video>
+    <div id="content-wrapper">
+        <div id="greeting"></div>
+        <div id="animation-container">
+            <video id="animation" muted>
+                <source src="assets/IMG_0.MOV" type="video/quicktime">
+                Your browser does not support the video tag.
+            </video>
+        </div>
     </div>
 
     <script>
