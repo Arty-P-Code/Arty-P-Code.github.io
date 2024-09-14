@@ -37,6 +37,7 @@
             font-weight: 300;
             font-style: italic;
             font-size: 2.6em;
+            overflow: hidden;
             white-space: nowrap;
             background: linear-gradient(
                 to right, 
@@ -47,7 +48,9 @@
             color: transparent;
             -webkit-background-clip: text;
             background-clip: text;
-            animation: gradient 15s linear infinite;
+            animation: 
+                typing 3s steps(40, end) forwards,
+                gradient 15s linear infinite;
         }
         #animation-wrapper {
             width: 90%;
@@ -64,6 +67,10 @@
             height: auto;
             max-height: 70vh;
             object-fit: contain;
+        }
+        @keyframes typing {
+            from { max-width: 0 }
+            to { max-width: 100% }
         }
         @keyframes gradient {
             0% { background-position: 0% 50%; }
@@ -82,9 +89,8 @@
                 font-size: 1.8em;
                 white-space: normal;
                 text-align: center;
-                display: inline-block;
                 animation: 
-                    fadeIn 1s ease-out,
+                    typing-mobile 3s steps(40, end) forwards,
                     gradient 15s linear infinite;
             }
             #animation-wrapper {
@@ -102,9 +108,15 @@
             }
         }
 
-        @keyframes fadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
+        @keyframes typing-mobile {
+            from { 
+                max-height: 0;
+                opacity: 0;
+            }
+            to { 
+                max-height: 100px; /* Adjust this value based on your content */
+                opacity: 1;
+            }
         }
     </style>
 </head>
