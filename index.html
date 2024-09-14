@@ -37,8 +37,9 @@
             font-weight: 300;
             font-style: italic;
             font-size: 2.6em;
-            overflow: hidden;
+            display: inline-block;
             white-space: nowrap;
+            overflow: hidden;
             background: linear-gradient(
                 to right, 
                 #60756E, #6E847E, #7E9993, #88A19B, #7E9993, #6E847E, #60756E,
@@ -69,8 +70,8 @@
             object-fit: contain;
         }
         @keyframes typing {
-            from { max-width: 0 }
-            to { max-width: 100% }
+            from { width: 0 }
+            to { width: 100% }
         }
         @keyframes gradient {
             0% { background-position: 0% 50%; }
@@ -88,10 +89,7 @@
             #greeting {
                 font-size: 1.8em;
                 white-space: normal;
-                text-align: center;
-                animation: 
-                    typing-mobile 3s steps(40, end) forwards,
-                    gradient 15s linear infinite;
+                word-break: break-word;
             }
             #animation-wrapper {
                 width: 100%;
@@ -106,12 +104,6 @@
             #greeting {
                 font-size: 1.5em;
             }
-        }
-
-        @keyframes typing-mobile {
-            @keyframes typing {
-            from { max-width: 0 }
-            to { max-width: 100% }
         }
     </style>
 </head>
@@ -197,6 +189,10 @@
             }
 
             greetingElement.textContent = greeting;
+            // Reset the animation
+            greetingElement.style.animation = 'none';
+            greetingElement.offsetHeight; // Trigger reflow
+            greetingElement.style.animation = 'typing 3s steps(40, end) forwards, gradient 15s linear infinite';
         }
 
         updateGreeting();
