@@ -30,13 +30,13 @@
         #greeting-wrapper {
             width: 80%;
             margin-bottom: 20px;
+            overflow: hidden;
         }
         #greeting {
             font-family: 'Montserrat Alternates', sans-serif;
             font-weight: 300;
             font-style: italic;
             font-size: 2.6em;
-            overflow: hidden;
             white-space: nowrap;
             background: linear-gradient(
                 to right, 
@@ -47,9 +47,7 @@
             color: transparent;
             -webkit-background-clip: text;
             background-clip: text;
-            animation: 
-                typing 3s steps(40, end) forwards,
-                gradient 15s linear infinite;
+            animation: gradient 15s linear infinite;
         }
         #animation-wrapper {
             width: 90%;
@@ -66,10 +64,6 @@
             height: auto;
             max-height: 70vh;
             object-fit: contain;
-        }
-        @keyframes typing {
-            from { max-width: 0 }
-            to { max-width: 100% }
         }
         @keyframes gradient {
             0% { background-position: 0% 50%; }
@@ -88,6 +82,10 @@
                 font-size: 1.8em;
                 white-space: normal;
                 text-align: center;
+                display: inline-block;
+                animation: 
+                    fadeIn 1s ease-out,
+                    gradient 15s linear infinite;
             }
             #animation-wrapper {
                 width: 100%;
@@ -102,6 +100,11 @@
             #greeting {
                 font-size: 1.5em;
             }
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
         }
     </style>
 </head>
