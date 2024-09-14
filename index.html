@@ -20,9 +20,12 @@
         }
         #content-wrapper {
             width: 100%;
+            max-width: 1200px;
             display: flex;
             flex-direction: column;
             align-items: center;
+            padding: 20px;
+            box-sizing: border-box;
         }
         #greeting-wrapper {
             width: 80%;
@@ -60,7 +63,8 @@
         }
         #animation {
             width: 100%;
-            height: 100%;
+            height: auto;
+            max-height: 70vh;
             object-fit: contain;
         }
         @keyframes typing {
@@ -70,6 +74,34 @@
         @keyframes gradient {
             0% { background-position: 0% 50%; }
             100% { background-position: -100% 50%; }
+        }
+
+        /* Media query for screens smaller than 768px (typical tablet/phone breakpoint) */
+        @media (max-width: 767px) {
+            #content-wrapper {
+                padding: 10px;
+            }
+            #greeting-wrapper {
+                width: 100%;
+            }
+            #greeting {
+                font-size: 1.8em;
+                white-space: normal;
+                text-align: center;
+            }
+            #animation-wrapper {
+                width: 100%;
+            }
+            #animation {
+                max-height: 50vh;
+            }
+        }
+
+        /* Media query for very small screens */
+        @media (max-width: 380px) {
+            #greeting {
+                font-size: 1.5em;
+            }
         }
     </style>
 </head>
