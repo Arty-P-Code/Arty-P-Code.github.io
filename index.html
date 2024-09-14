@@ -19,10 +19,14 @@
             background-color: white;
         }
         #content-wrapper {
-            width: 80%;
+            width: 100%;
             display: flex;
             flex-direction: column;
-            align-items: flex-start;
+            align-items: center;
+        }
+        #greeting-wrapper {
+            width: 80%;
+            margin-bottom: 20px;
         }
         #greeting {
             font-family: 'Montserrat Alternates', sans-serif;
@@ -31,9 +35,9 @@
             font-size: 2.6em;
             overflow: hidden;
             white-space: nowrap;
-            margin-bottom: 20px;
             background: linear-gradient(
                 to right, 
+                #60756E, #6E847E, #7E9993, #88A19B, #7E9993, #6E847E, #60756E,
                 #60756E, #6E847E, #7E9993, #88A19B, #7E9993, #6E847E, #60756E
             );
             background-size: 200% auto;
@@ -42,7 +46,10 @@
             background-clip: text;
             animation: 
                 typing 3s steps(40, end) forwards,
-                gradient 10s linear infinite;
+                gradient 15s linear infinite;
+        }
+        #animation-wrapper {
+            width: 90%;
         }
         #animation-container {
             width: 100%;
@@ -62,18 +69,22 @@
         }
         @keyframes gradient {
             0% { background-position: 0% 50%; }
-            100% { background-position: 100% 50%; }
+            100% { background-position: -100% 50%; }
         }
     </style>
 </head>
 <body>
     <div id="content-wrapper">
-        <div id="greeting"></div>
-        <div id="animation-container">
-            <video id="animation" muted>
-                <source src="assets/IMG_0.MOV" type="video/quicktime">
-                Your browser does not support the video tag.
-            </video>
+        <div id="greeting-wrapper">
+            <div id="greeting"></div>
+        </div>
+        <div id="animation-wrapper">
+            <div id="animation-container">
+                <video id="animation" muted>
+                    <source src="assets/IMG_0.MOV" type="video/quicktime">
+                    Your browser does not support the video tag.
+                </video>
+            </div>
         </div>
     </div>
 
