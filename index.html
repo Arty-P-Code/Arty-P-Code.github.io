@@ -105,6 +105,7 @@
             -webkit-background-clip: text;
             background-clip: text;
             opacity: 0;
+            width: 0;
         }
         @keyframes typing {
             from { width: 0 }
@@ -232,7 +233,7 @@
             if (!noPostTextShown) {
                 noPostTextElement.style.opacity = '1';
                 typeText(noPostTextElement, "Sorry, there is no post at the moment.");
-                noPostTextElement.style.animation = 'gradient 15s linear infinite';
+                noPostTextElement.style.animation = 'typing 3s steps(40, end) forwards, gradient 15s linear infinite';
                 noPostTextShown = true;
             }
         }
@@ -312,8 +313,9 @@
                 displayLastFrame();
                 showMailText();
                 hideNoPostText();
-            } else {
+            } else if (currentStatus === 0) {
                 showNoPostText();
+                hideMailText();
             }
         });
     </script>
