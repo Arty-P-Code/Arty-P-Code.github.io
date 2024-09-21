@@ -84,6 +84,28 @@
             overflow: hidden;
             text-shadow: 2px 2px 4px rgba(0,0,0,0.5); /* Add shadow for better visibility */
         }
+        #no-post-text {
+            width: 74%;
+            margin-top: 20px;
+            overflow: hidden;
+            font-family: 'Montserrat Alternates', sans-serif;
+            font-weight: 300;
+            font-style: italic;
+            font-size: 2.6em;
+            display: inline-block;
+            white-space: nowrap;
+            overflow: hidden;
+            background: linear-gradient(
+                to right, 
+                #60756E, #6E847E, #7E9993, #88A19B, #7E9993, #6E847E, #60756E,
+                #60756E, #6E847E, #7E9993, #88A19B, #7E9993, #6E847E, #60756E
+            );
+            background-size: 200% auto;
+            color: transparent;
+            -webkit-background-clip: text;
+            background-clip: text;
+            opacity: 0;
+        }
         @keyframes typing {
             from { width: 0 }
             to { width: 100% }
@@ -141,15 +163,18 @@
                 </video>
             </div>
             <div id="mail-text"></div>
+            <div id="no-post-text"></div>
         </div>
     </div>
 
     <script>
         const animationElement = document.getElementById('animation');
         const mailTextElement = document.getElementById('mail-text');
+        const noPostTextElement = document.getElementById('no-post-text');
         let lastStatus = null;
         let currentStatus = 0;
         let mailTextShown = false;
+        let noPostTextShown = false;
 
         const channelId = '2635910';
         const fieldNumber = 1;
@@ -203,6 +228,22 @@
                 }
             }, 100);
         }
+        function showNoPostText() {
+            if (!noPostTextShown) {
+                noPostTextElement.style.opacity = '1';
+                typeText(noPostTextElement, "Sorry, there is no post at the moment.");
+                noPostTextElement.style.animation = 'gradient 15s linear infinite';
+                noPostTextShown = true;
+            }
+        }
+
+        function hideNoPostText() {
+            noPostTextElement.style.opacity = '0';
+            noPostTextElement.textContent = '';
+            noPostTextElement.style.animation = 'none';
+            noPostTextShown = false;
+            clearInterval(noPostTextElement.typingInterval);
+        }
         function fetchThingSpeakData() {
             fetch(`https://api.thingspeak.com/channels/${channelId}/fields/${fieldNumber}/last.json`)
                 .then(response => response.json())
@@ -211,17 +252,23 @@
 
                     if (lastStatus === 0 && currentStatus === 1) {
                         startAnimation();
+                        hideNoPostText();
                     } else if (currentStatus === 1 && animationElement.paused && animationElement.currentTime === 0) {
                         setTimeout(() => {
                             startAnimation();
+                            hideNoPostText();
                         }, 2000);
                     } else if (currentStatus === 0) {
                         stopAnimation();
                         displayFirstFrame();
                         mailTextShown = false;
+                        if (animationElement.ended) {
+                            showNoPostText();
+                        }
                     } else if (currentStatus === 1 && animationElement.ended) {
                         displayLastFrame();
                         showMailText();
+                        hideNoPostText();
                     }
 
                     lastStatus = currentStatus;
@@ -230,7 +277,6 @@
                     console.error('Error fetching ThingSpeak data:', error);
                 });
         }
-
         function updateGreeting() {
             const greetingElement = document.getElementById('greeting');
             const hour = new Date().getHours();
@@ -265,6 +311,9 @@
             if (currentStatus === 1) {
                 displayLastFrame();
                 showMailText();
+                hideNoPostText();
+            } else {
+                showNoPostText();
             }
         });
     </script>
