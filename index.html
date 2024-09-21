@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Animation</title>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Montserrat+Alternates:ital,wght@1,300&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Montserrat+Alternates:ital,wght@0,400;1,300&display=swap');
 
         body {
             font-family: Arial, sans-serif;
@@ -55,6 +55,7 @@
         }
         #animation-wrapper {
             width: 90%;
+            position: relative;
         }
         #animation-container {
             width: 100%;
@@ -68,6 +69,20 @@
             height: auto;
             max-height: 70vh;
             object-fit: contain;
+        }
+        #mail-text {
+            position: absolute;
+            top: 70%; /* Adjust this value to change the vertical position */
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-family: 'Montserrat Alternates', sans-serif;
+            font-weight: 400;
+            font-size: 2em;
+            color: white;
+            opacity: 0;
+            white-space: nowrap;
+            overflow: hidden;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5); /* Add shadow for better visibility */
         }
         @keyframes typing {
             from { width: 0 }
@@ -97,12 +112,18 @@
             #animation {
                 max-height: 50vh;
             }
+            #mail-text {
+                font-size: 1.5em;
+            }
         }
 
         /* Media query for very small screens */
         @media (max-width: 380px) {
             #greeting {
                 font-size: 1.5em;
+            }
+            #mail-text {
+                font-size: 1.2em;
             }
         }
     </style>
@@ -119,11 +140,13 @@
                     Your browser does not support the video tag.
                 </video>
             </div>
+            <div id="mail-text"></div>
         </div>
     </div>
 
     <script>
         const animationElement = document.getElementById('animation');
+        const mailTextElement = document.getElementById('mail-text');
         let lastStatus = null;
         let currentStatus = 0;
 
@@ -137,16 +160,41 @@
 
         function stopAnimation() {
             animationElement.pause();
+            hideMailText();
         }
 
         function displayFirstFrame() {
             animationElement.currentTime = 0;
             animationElement.pause();
+            hideMailText();
         }
 
         function displayLastFrame() {
             animationElement.currentTime = animationElement.duration;
             animationElement.pause();
+        }
+
+        function showMailText() {
+            mailTextElement.style.opacity = '1';
+            typeText(mailTextElement, "You've got mail!");
+        }
+
+        function hideMailText() {
+            mailTextElement.style.opacity = '0';
+            mailTextElement.textContent = '';
+        }
+
+        function typeText(element, text) {
+            element.textContent = '';
+            let i = 0;
+            const typingInterval = setInterval(() => {
+                if (i < text.length) {
+                    element.textContent += text.charAt(i);
+                    i++;
+                } else {
+                    clearInterval(typingInterval);
+                }
+            }, 100);
         }
 
         function fetchThingSpeakData() {
@@ -166,6 +214,7 @@
                         displayFirstFrame();
                     } else if (currentStatus === 1 && animationElement.ended) {
                         displayLastFrame();
+                        showMailText();
                     }
 
                     lastStatus = currentStatus;
@@ -208,6 +257,7 @@
         animationElement.addEventListener('ended', () => {
             if (currentStatus === 1) {
                 displayLastFrame();
+                showMailText();
             }
         });
     </script>
