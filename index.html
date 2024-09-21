@@ -72,12 +72,12 @@
         }
         #mail-text {
             position: absolute;
-            top: 47.5%; /* Adjust this value to change the vertical position */
+            top: 42.5%; /* Adjust this value to change the vertical position */
             left: 50%;
             transform: translate(-50%, -50%);
             font-family: 'Montserrat Alternates', sans-serif;
             font-weight: 400;
-            font-size: 3em;
+            font-size: 4em;
             color: white;
             opacity: 0;
             white-space: nowrap;
@@ -149,6 +149,7 @@
         const mailTextElement = document.getElementById('mail-text');
         let lastStatus = null;
         let currentStatus = 0;
+        let mailTextShown = false;
 
         const channelId = '2635910';
         const fieldNumber = 1;
@@ -175,28 +176,33 @@
         }
 
         function showMailText() {
-            mailTextElement.style.opacity = '1';
-            typeText(mailTextElement, "You've got mail!");
+            if (!mailTextShown) {
+                mailTextElement.style.opacity = '1';
+                typeText(mailTextElement, "You've got mail!");
+                mailTextShown = true;
+            }
         }
 
         function hideMailText() {
             mailTextElement.style.opacity = '0';
             mailTextElement.textContent = '';
+            mailTextShown = false;
+            clearInterval(mailTextElement.typingInterval);
         }
 
         function typeText(element, text) {
             element.textContent = '';
+            clearInterval(element.typingInterval);
             let i = 0;
-            const typingInterval = setInterval(() => {
+            element.typingInterval = setInterval(() => {
                 if (i < text.length) {
                     element.textContent += text.charAt(i);
                     i++;
                 } else {
-                    clearInterval(typingInterval);
+                    clearInterval(element.typingInterval);
                 }
             }, 100);
         }
-
         function fetchThingSpeakData() {
             fetch(`https://api.thingspeak.com/channels/${channelId}/fields/${fieldNumber}/last.json`)
                 .then(response => response.json())
@@ -212,6 +218,7 @@
                     } else if (currentStatus === 0) {
                         stopAnimation();
                         displayFirstFrame();
+                        mailTextShown = false;
                     } else if (currentStatus === 1 && animationElement.ended) {
                         displayLastFrame();
                         showMailText();
