@@ -216,7 +216,7 @@
             clearInterval(mailTextElement.typingInterval);
         }
 
-        function typeText(element, text) {
+        function typeText(element, text, callback) {
             element.textContent = '';
             clearInterval(element.typingInterval);
             let i = 0;
@@ -226,18 +226,19 @@
                     i++;
                 } else {
                     clearInterval(element.typingInterval);
+                    if (callback) callback();
                 }
             }, 100);
         }
         function showNoPostText() {
             if (!noPostTextShown) {
                 noPostTextElement.style.opacity = '1';
+                noPostTextElement.style.width = '0';  // Reset width before animation
                 typeText(noPostTextElement, "Sorry, there is no post at the moment.");
                 noPostTextElement.style.animation = 'typing 3s steps(40, end) forwards, gradient 15s linear infinite';
                 noPostTextShown = true;
             }
         }
-
         function hideNoPostText() {
             noPostTextElement.style.opacity = '0';
             noPostTextElement.textContent = '';
@@ -251,6 +252,10 @@
                 .then(data => {
                     currentStatus = parseInt(data[`field${fieldNumber}`]);
 
+                    if (lastStatus !== currentStatus) {
+                        updateGreeting();  // Update greeting when status changes
+                    }
+
                     if (lastStatus === 0 && currentStatus === 1) {
                         startAnimation();
                         hideNoPostText();
@@ -263,9 +268,6 @@
                         stopAnimation();
                         displayFirstFrame();
                         mailTextShown = false;
-                        if (animationElement.ended) {
-                            showNoPostText();
-                        }
                     } else if (currentStatus === 1 && animationElement.ended) {
                         displayLastFrame();
                         showMailText();
@@ -291,11 +293,16 @@
                 greeting = "Good evening, Laura";
             }
 
-            greetingElement.textContent = greeting;
-            // Reset the animation
+            greetingElement.textContent = '';
             greetingElement.style.animation = 'none';
             greetingElement.offsetHeight; // Trigger reflow
             greetingElement.style.animation = 'typing 3s steps(40, end) forwards, gradient 15s linear infinite';
+    
+            typeText(greetingElement, greeting, () => {
+                if (currentStatus === 0) {
+                    showNoPostText();
+                }
+            });
         }
 
         updateGreeting();
@@ -314,7 +321,6 @@
                 showMailText();
                 hideNoPostText();
             } else if (currentStatus === 0) {
-                showNoPostText();
                 hideMailText();
             }
         });
