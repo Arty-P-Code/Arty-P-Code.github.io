@@ -110,6 +110,12 @@
             opacity: 0;
             width: 0;
         }
+        .emoji {
+            position: absolute;
+            font-size: 24px;
+            animation: fall linear forwards;
+            opacity: 0;
+        }
         @keyframes typing {
             from { width: 0 }
             to { width: 100% }
@@ -117,6 +123,22 @@
         @keyframes gradient {
             0% { background-position: 0% 50%; }
             100% { background-position: -100% 50%; }
+        }
+        @keyframes fall {
+            0% {
+                transform: translateY(-100%) rotate(0deg);
+                opacity: 0;
+            }
+            10% {
+                opacity: 1;
+            }
+            90% {
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(100vh) rotate(360deg);
+                opacity: 0;
+            }
         }
 
         /* Media query for screens smaller than 768px (typical tablet/phone breakpoint) */
@@ -170,6 +192,8 @@
             <div id="no-post-text"></div>
         </div>
     </div>
+
+    <script src="emoji.js"></script>
 
     <script>
         const animationElement = document.getElementById('animation');
@@ -262,19 +286,23 @@
                     if (lastStatus === 0 && currentStatus === 1) {
                         startAnimation();
                         hideNoPostText();
+                        startEmojiAnimation(); // Use the function from emoji.js
                     } else if (currentStatus === 1 && animationElement.paused && animationElement.currentTime === 0) {
                         setTimeout(() => {
                             startAnimation();
                             hideNoPostText();
+                            startEmojiAnimation(); // Use the function from emoji.js
                         }, 2000);
                     } else if (currentStatus === 0) {
                         stopAnimation();
                         displayFirstFrame();
                         mailTextShown = false;
+                        stopEmojiAnimation(); // Use the function from emoji.js
                     } else if (currentStatus === 1 && animationElement.ended) {
                         displayLastFrame();
                         showMailText();
                         hideNoPostText();
+                        startEmojiAnimation(); // Use the function from emoji.js
                     }
 
                     lastStatus = currentStatus;
