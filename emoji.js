@@ -7,7 +7,18 @@ function createEmoji() {
     emoji.textContent = emojis[Math.floor(Math.random() * emojis.length)];
     emoji.style.left = `${Math.random() * 100}vw`;
     emoji.style.fontSize = `${Math.random() * 16 + 24}px`;
-    emoji.style.animationDuration = `${Math.random() * 5 + 5}s`;
+    
+    // Randomize rotation direction
+    const rotationDirection = Math.random() < 0.5 ? 'clockwise' : 'anticlockwise';
+    emoji.dataset.rotation = rotationDirection;
+
+    // Set animation duration
+    const duration = Math.random() * 5 + 5;
+    emoji.style.animationDuration = `${duration}s`;
+
+    // Set starting position above the screen
+    emoji.style.top = `-50px`;
+
     document.body.appendChild(emoji);
 
     emoji.addEventListener('animationend', () => {
@@ -17,7 +28,9 @@ function createEmoji() {
 
 function startEmojiAnimation() {
     if (!emojiInterval) {
-        emojiInterval = setInterval(createEmoji, 500);
+        // Adjust this value to change the frequency of emoji generation
+        // Increase the number to reduce frequency (e.g., 1000 for one emoji per second)
+        emojiInterval = setInterval(createEmoji, 2500);
     }
 }
 
